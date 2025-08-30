@@ -8,7 +8,7 @@ load_dotenv(env_path)
 
 BOT_TOKEN_API=getenv('BOT_TOKEN_API')
 
-MAX_CAPACITY=99.0
+MAX_CAPACITY=100
 
 URL = "https://www.exponent.finance/liquidity/xsol-26Nov25"
 PERIOD_SEC = 10
