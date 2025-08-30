@@ -1,6 +1,6 @@
 from time import time
 from typing import List
-from config import ALERT_COOLDOWN_SEC
+from .config import ALERT_COOLDOWN_SEC
 from aiogram import Bot
 
 last_notification_time = 0
@@ -14,3 +14,5 @@ async def notify(bot: Bot, chat_ids: List[str | int], curr_capacity: float):
                 chat_id=id,
                 text=f'⚠️ Pool capacity now is {curr_capacity}% ⚠️'
             )
+
+        last_notification_time = now

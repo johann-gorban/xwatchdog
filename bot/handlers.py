@@ -1,20 +1,23 @@
 from aiogram import Router, Bot
 from aiogram.types import Message
 from aiogram.filters import Command
-from fetcher import fetch_width
 from config import MAX_CAPACITY, URL
-from notifier import notify
+
+from services.notifier import notify
+from services.storage import get_chat_ids, add_chat_id
+from services.fetcher import fetch_width
+
+from keyboards import main_kb
 
 router = Router()
 
-chat_ids = set()
-
 @router.message(Command('start'))
 async def cmd_start(message: Message):
-    chat_ids.add(message.chat.id)
+    add_chat_id(message.chat.id)
     await message.answer(
-        'Hello! I\'m Crypto Watchdog, now I\'m watching for Exponent xSOL pool\n\n'
-        'I will tell you about changes in the pool or you can write command /check to get current pool capacity right now'
+        '👋 Hello! I\'m Crypto Watchdog, now I\'m watching for Exponent xSOL pool\n\n'
+        '💸 I will tell you about changes in the pool or you can write command /check to get current pool capacity right now',
+        reply_markup=main_kb
     )
 
 
@@ -36,6 +39,7 @@ async def check_capacity(bot: Bot):
     width: str = await fetch_width(URL)
     curr_capacity = float(width.rstrip('%'))
     if curr_capacity <= MAX_CAPACITY:
+        chat_ids = get_chat_ids()
         await notify(
             bot=bot,
             chat_ids=chat_ids,

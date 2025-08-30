@@ -1,6 +1,7 @@
 from aiogram import Dispatcher, Bot
 from config import BOT_TOKEN_API, PERIOD_SEC
 from handlers import router, check_capacity
+from keyboards import set_commands
 import asyncio
 
 
@@ -15,6 +16,8 @@ async def main_loop():
 
 
 async def main_start():
+    await set_commands(bot)
+
     dp.include_router(router)
     await asyncio.gather(
         dp.start_polling(bot),

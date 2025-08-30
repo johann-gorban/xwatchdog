@@ -12,5 +12,3 @@ MAX_CAPACITY=99.0
 
 URL = "https://www.exponent.finance/liquidity/xsol-26Nov25"
 PERIOD_SEC = 10
-
-ALERT_COOLDOWN_SEC = 600
