@@ -27,17 +27,12 @@ async def cmd_start(message: Message):
 async def cmd_check(message: Message):
     result_message = 'Current pools capacity\n\n'
     for pool in pools:
-        width: str = await fetch_width(pool.url)
-        if width is None:
-            await message.answer("Cannot fetch capacity")
-            return
-    
-        curr_capacity = float(width.rstrip('%'))
-        pool.capacity = curr_capacity
-
-        if (curr_capacity < MAX_CAPACITY):
+        if (pool.capacity < MAX_CAPACITY):
             result_message += '⚠️ '
-        result_message += f'[{pool.token}] is {curr_capacity}%\n'
+        if (pool.capacity == 100):
+            result_message += f'[{pool.token}] is full\n'
+        else:
+            result_message += f'[{pool.token}] is {pool.capacity}%\n'
 
     await message.answer(result_message)
 
@@ -48,7 +43,7 @@ async def check_capacity(bot: Bot):
         width: str = await fetch_width(pool.url)
         curr_capacity = float(width.rstrip('%'))
         pool.capacity = curr_capacity
-        if curr_capacity <= MAX_CAPACITY:
+        if curr_capacity < MAX_CAPACITY:
             pools_to_alert.append(pool)
 
     if pools_to_alert:
