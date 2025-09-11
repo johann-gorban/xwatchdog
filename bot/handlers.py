@@ -27,10 +27,12 @@ async def cmd_start(message: Message):
 async def cmd_check(message: Message):
     result_message = 'Current pools capacity\n\n'
     for pool in pools:
-        if (pool.capacity < MAX_CAPACITY):
+        if (pool.capacity is not None and pool.capacity < MAX_CAPACITY):
             result_message += '⚠️ '
-        if (pool.capacity == 100):
+        if (pool.capacity is not None and pool.capacity == 100):
             result_message += f'[{pool.token}] is full\n'
+        elif pool.capacity is None:
+            result_message += f'[{pool.token}]: parsing error\n' 
         else:
             result_message += f'[{pool.token}] is {pool.capacity}%\n'
 
@@ -40,10 +42,10 @@ async def cmd_check(message: Message):
 async def check_capacity(bot: Bot):
     pools_to_alert = []
     for pool in pools:
-        width: str = await fetch_width(pool.url)
-        curr_capacity = float(width.rstrip('%'))
-        pool.capacity = curr_capacity
-        if curr_capacity < MAX_CAPACITY:
+        capacity: float = await fetch_width(pool.url)
+        pool.capacity = capacity
+
+        if capacity is not None and capacity < MAX_CAPACITY:
             pools_to_alert.append(pool)
 
     if pools_to_alert:

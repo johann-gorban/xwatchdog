@@ -9,7 +9,10 @@ last_notification_time = 0
 def create_notification_text(pools: List[Pool]) -> str:
     notification = 'New update:\n\n'
     for pool in pools:
-        notification += f'[{pool.token}]: {pool.capacity}%\n'
+        if pool.capacity is not None:
+            notification += f'[{pool.token}]: {pool.capacity}%\n'
+        else:
+            notification += f'[{pool.token}]: parsing error\n'
 
     return notification
 

@@ -23,15 +23,8 @@ class Pool:
 
 pools = [
     Pool(
-        url="https://www.exponent.finance/liquidity/xsol-26Nov25",
-        token="xSOL"
-    ),
-    Pool(
         url='https://www.exponent.finance/liquidity/shyusd-18Nov25',
-        token='sHYUSD'
+        token='sHYUSD',
+        capacity=100
     ),
-    Pool(
-        url='https://www.exponent.finance/liquidity/kysol-30Sep25',
-        token='kySOL'
-    )
 ]
