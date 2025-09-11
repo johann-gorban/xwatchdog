@@ -43,7 +43,8 @@ async def check_capacity(bot: Bot):
     pools_to_alert = []
     for pool in pools:
         capacity: float = await fetch_width(pool.url)
-        pool.capacity = capacity
+
+        pool.capacity = capacity if capacity else pool.capacity
 
         if capacity is not None and capacity < MAX_CAPACITY:
             pools_to_alert.append(pool)
