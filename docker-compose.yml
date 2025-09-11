@@ -1,0 +1,11 @@
+services:
+  bot:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/bot
+    environment:
+      - DEBUG=1
+      - PYTHONUNBUFFERED=1
+    tty: true

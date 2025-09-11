@@ -13,4 +13,4 @@ RUN playwright install-deps
 
 COPY . .
 
-CMD ["python", "bot/main.py"]
+CMD ["python3", "-u", "bot/main.py"]
