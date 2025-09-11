@@ -2,6 +2,7 @@ from aiogram import Router, Bot
 from aiogram.types import Message
 from aiogram.filters import Command
 from config import MAX_CAPACITY, URL
+from datetime import datetime, timezone
 
 from services.notifier import notify, create_notification_text
 from services.storage import get_chat_ids, add_chat_id
@@ -30,11 +31,16 @@ async def cmd_check(message: Message):
         if (pool.capacity is not None and pool.capacity < MAX_CAPACITY):
             result_message += '⚠️ '
         if (pool.capacity is not None and pool.capacity == 100):
-            result_message += f'[{pool.token}] is full\n'
+            result_message += f'[{pool.token}] is full'
         elif pool.capacity is None:
-            result_message += f'[{pool.token}]: parsing error\n' 
+            result_message += f'[{pool.token}]: parsing error' 
         else:
-            result_message += f'[{pool.token}] is {pool.capacity}%\n'
+            result_message += f'[{pool.token}] is {pool.capacity}%'
+
+        delta = datetime.now(tz=timezone.utc) - pool.update_time
+        seconds = int(delta.total_seconds())
+
+        result_message += f' ({seconds}s ago)\n'
 
     await message.answer(result_message)
 

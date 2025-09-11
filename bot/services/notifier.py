@@ -3,17 +3,24 @@ from typing import List
 from models.tokens import Pool
 from .config import ALERT_COOLDOWN_SEC
 from aiogram import Bot
+from datetime import timedelta, datetime, timezone
 
 last_notification_time = 0
 
 def create_notification_text(pools: List[Pool]) -> str:
     notification = 'New update:\n\n'
     for pool in pools:
-        if pool.capacity is not None:
-            notification += f'[{pool.token}]: {pool.capacity}%\n'
-        else:
-            notification += f'[{pool.token}]: parsing error\n'
+        delta = datetime.now(tz=timezone.utc) - pool.update_time
+        seconds = int(delta.total_seconds())
 
+        if pool.capacity is not None:
+            notification += f'[{pool.token}]: {pool.capacity}%'
+        else:
+            notification += f'[{pool.token}]: parsing error'
+        
+        notification += f' ({seconds}s ago)'
+        notification += '\n'
+        
     return notification
 
 
